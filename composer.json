@@ -1,0 +1,36 @@
+{
+    "name": "volldigital/laravel-immobilienscout24",
+    "description": "tba",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tobias Fuchs",
+            "email": "tobias.fuchs@voll.digital"
+        }
+    ],
+    "require": {
+        "laravel/framework": "^8.23",
+        "league/oauth1-client": "^1.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "VOLLdigital\\LaravelImmobilienscout24\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "laravel": {
+            "providers": [
+                "VOLLdigital\\LaravelImmobilienscout24\\ServiceProvider"
+            ]
+        }
+    }
+}
