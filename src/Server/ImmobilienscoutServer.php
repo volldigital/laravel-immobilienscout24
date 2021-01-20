@@ -57,10 +57,17 @@ class ImmobilienscoutServer extends Server
         : 'https://rest.immobilienscout24.de/restapi/api';
     }
 
-    public function fetchData(string $uri, $tokenCredentials)
+    public function fetchData(string $uri)
     {
         $url = $this->baseUrl() . $uri;
         $client = $this->createHttpClient();
+
+        $tokenCredentials = unserialize(session('immo_cred'));
+
+        if (is_null($tokenCredentials)) {
+            throw new \Exception('No token credentials available');
+        }
+
         $headers = $this->getHeaders($tokenCredentials, 'GET', $url);
 
         try {
