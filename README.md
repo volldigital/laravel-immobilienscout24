@@ -2,6 +2,11 @@
 
 Access the Immobilienscout24 API within Laravel.
 
+## Requirements
+
+- PHP 8
+- Laravel 8
+
 ## Installation
 
 ```
