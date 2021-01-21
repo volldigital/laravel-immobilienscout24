@@ -3,6 +3,7 @@
 namespace VOLLdigital\LaravelImmobilienscout24\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use VOLLdigital\LaravelImmobilienscout24\Models\Is24Token;
 use VOLLdigital\LaravelImmobilienscout24\Server\ImmobilienscoutServer;
 
 class ImmobilienscoutController extends Controller
@@ -10,6 +11,8 @@ class ImmobilienscoutController extends Controller
 
     public function authorize()
     {
+        Is24Token::first()?->delete();
+        
         $server = app(ImmobilienscoutServer::class);
 
         $temporaryCredentials = $server->getTemporaryCredentials();
@@ -27,7 +30,10 @@ class ImmobilienscoutController extends Controller
             $temporaryCredentials = unserialize(session('temporary_credentials'));
             $tokenCredentials = $server->getTokenCredentials($temporaryCredentials, $_GET['oauth_token'], $_GET['oauth_verifier']);
 
-            session()->put('immo_cred', serialize($tokenCredentials));
+            Is24Token::create([
+                'is_identifier' => $tokenCredentials->getIdentifier(),
+                'is_secret' => $tokenCredentials->getSecret()
+            ]);
         }
 
         return redirect('/');

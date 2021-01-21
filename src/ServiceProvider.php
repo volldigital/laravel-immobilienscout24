@@ -11,10 +11,12 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/Config/immobilienscout.php' => config_path('immobilienscout.php'),
+            __DIR__ . '/Config/immobilienscout.php' => config_path('immobilienscout.php'),
         ]);
 
-        $this->loadRoutesFrom(__DIR__.'/Routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
+
+        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
     }
 
     public function register()

@@ -2,8 +2,10 @@
 
 namespace VOLLdigital\LaravelImmobilienscout24\Server;
 
+use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use League\OAuth1\Client\Credentials\TokenCredentials;
+use VOLLdigital\LaravelImmobilienscout24\Models\Is24Token;
 
 class ImmobilienscoutServer extends Server
 {
@@ -62,7 +64,15 @@ class ImmobilienscoutServer extends Server
         $url = $this->baseUrl() . $uri;
         $client = $this->createHttpClient();
 
-        $tokenCredentials = unserialize(session('immo_cred'));
+        $token = Is24Token::first();
+
+        if (is_null($token)) {
+            throw new Exception('No authentication token available');
+        }
+
+        $tokenCredentials = new TokenCredentials();
+        $tokenCredentials->setIdentifier($token->is_identifier);
+        $tokenCredentials->setSecret($token->is_secret);
 
         if (is_null($tokenCredentials)) {
             throw new \Exception('No token credentials available');
@@ -79,7 +89,7 @@ class ImmobilienscoutServer extends Server
             $body = $response->getBody();
             $statusCode = $response->getStatusCode();
 
-            throw new \Exception("Received error [$body] with status code [$statusCode] when retrieving token credentials.");
+            throw new \Exception("Received error [$body] with status code [$statusCode].");
         }
 
         return json_decode((string) $response->getBody(), true);
